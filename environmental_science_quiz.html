@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Environmental Science Quiz - 80 MCQ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 5px;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            background: white;
+            height: 10px;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .quiz-container {
+            padding: 40px;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4facfe;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-number {
+            color: #4facfe;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #4facfe;
+            background: #f0f8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .option.selected {
+            border-color: #4facfe;
+            background: #4facfe;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
+        }
+
+        .option-letter {
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 25px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .start-screen,
+        .results-screen {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .start-screen h2,
+        .results-screen h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .start-screen p,
+        .results-screen p {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border-left: 5px solid #4facfe;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .topic-breakdown {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .topic-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-excellent {
+            color: #28a745;
+        }
+
+        .score-good {
+            color: #ffc107;
+        }
+
+        .score-fair {
+            color: #fd7e14;
+        }
+
+        .score-poor {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .quiz-container,
+            .start-screen,
+            .results-screen {
+                padding: 20px;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .detailed-answers {
+            margin-top: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: left;
+        }
+
+        .answer-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .user-answer {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .user-answer.correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .user-answer.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .correct-answer {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 Environmental Science Quiz</h1>
+            <p>Test your knowledge with 80 comprehensive questions</p>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-screen">
+            <h2>Welcome to the Environmental Science Quiz!</h2>
+            <p>This quiz covers four important topics:</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Infection Control</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Environmental Biology</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Environmental Pollution</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <div class="stat-label">Waste Management</div>
+                </div>
+            </div>
+            <p>Answer all 80 questions to test your comprehensive understanding of environmental science.</p>
+            <button class="btn" onclick="startQuiz()">🚀 Start Quiz</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="quiz-container">
+            <div class="question-card">
+                <div class="question-number" id="questionNumber">Question 1 of 80</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn" id="prevBtn" onclick="previousQuestion()" disabled>← Previous</button>
+                <span id="questionCounter">1 / 80</span>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="results-screen" style="display: none;">
+            <h2>🎉 Quiz Complete!</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="finalScore">0</div>
+                    <div class="stat-label">Final Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="correctAnswers">0</div>
+                    <div class="stat-label">Correct Answers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="percentage">0%</div>
+                    <div class="stat-label">Percentage</div>
+                </div>
+            </div>
+
+            <div class="topic-breakdown">
+                <h3>Performance by Topic:</h3>
+                <div id="topicResults"></div>
+            </div>
+
+            <!-- Detailed Answers Section -->
+            <div class="detailed-answers">
+                <h3>Detailed Answers:</h3>
+                <div id="answerDetails"></div>
+            </div>
+
+            <button class="btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+
+        const questions = [
+            // Infection Control Questions (1-20)
+            {
+                topic: "Infection Control",
+                question: "What is environmental science?",
+                options: [
+                    "Study of only living organisms",
+                    "Study of only non-living things",
+                    "Interdisciplinary study of how humans interact with things around us",
+                    "Study of weather patterns only"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Infection Control",
+                question: "What defines an infection?",
+                options: [
+                    "Presence of any microorganism",
+                    "Only bacterial growth",
+                    "Viral replication only",
+                    "Presence and growth of a microorganism that produces tissue death"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Infection Control",
+                question: "Which of the following is NOT a class of microorganisms mentioned?",
+                options: [
+                    "Algae",
+                    "Bacteria",
+                    "Protozoa",
+                    "Viruses"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Infection Control",
+                question: "What is a nosocomial infection?",
+                options: [
+                    "Community-acquired infection",
+                    "Food-borne infection",
+                    "Hospital-acquired infection",
+                    "Airborne infection"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Infection Control",
+                question: "What do pathogens need to grow and reproduce?",
+                options: [
+                    "Cold, dry environment",
+                    "Bright light only",
+                    "High oxygen levels only",
+                    "Warm, moist, and dark environment with food source"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Infection Control",
+                question: "How do germs cause infections?",
+                options: [
+                    "By producing toxins and attacking immune cells",
+                    "Only by physical damage",
+                    "Only through genetic changes",
+                    "By reducing body temperature"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Infection Control",
+                question: "What is the first link in the chain of infection?",
+                options: [
+                    "Portal of exit",
+                    "Mode of transmission",
+                    "Susceptible host",
+                    "Causative agent"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Infection Control",
+                question: "What are reservoirs in the chain of infection?",
+                options: [
+                    "Only humans",
+                    "Only animals",
+                    "Animals, insects, humans, objects, surfaces, equipment, and environment",
+                    "Only water bodies"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Infection Control",
+                question: "Through which portals do pathogens exit the human body?",
+                options: [
+                    "Only through wounds",
+                    "Blood, secretions, tears, urine, feces, open wounds",
+                    "Only through respiratory system",
+                    "Only through digestive system"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Infection Control",
+                question: "What is the most common means of transmission?",
+                options: [
+                    "Contact transmission",
+                    "Airborne transmission",
+                    "Vector-borne transmission",
+                    "Food-borne transmission"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Infection Control",
+                question: "Contact transmission is divided into how many subgroups?",
+                options: [
+                    "Two",
+                    "Three",
+                    "Four",
+                    "Five"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Infection Control",
+                question: "Which insects are mentioned as vectors in transmission?",
+                options: [
+                    "Ants, beetles, flies",
+                    "Butterflies, moths, bees",
+                    "Fleas, ticks, mosquitoes",
+                    "Spiders, centipedes, millipedes"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Infection Control",
+                question: "What is a portal of entry?",
+                options: [
+                    "Where pathogens exit",
+                    "Means of entering a new reservoir or host",
+                    "Method of transmission",
+                    "Source of infection"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Infection Control",
+                question: "What characterizes a susceptible host?",
+                options: [
+                    "Strong immune system",
+                    "Unable to fight off the pathogen",
+                    "Vaccinated individual",
+                    "Healthy young adult"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Infection Control",
+                question: "Which is the MOST important infection prevention measure?",
+                options: [
+                    "Using antibiotics",
+                    "Washing hands",
+                    "Avoiding people",
+                    "Taking vitamins"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Infection Control",
+                question: "What should be done with surfaces to prevent infection?",
+                options: [
+                    "Leave them as they are",
+                    "Only clean when visibly dirty",
+                    "Use only water",
+                    "Routinely clean and disinfect"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Infection Control",
+                question: "Why is food safety important in infection prevention?",
+                options: [
+                    "It prevents nutritional deficiency",
+                    "It saves money",
+                    "It prevents foodborne infections",
+                    "It improves taste"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Infection Control",
+                question: "What role do immunizations play in infection prevention?",
+                options: [
+                    "They cure existing infections",
+                    "They prevent specific infections by building immunity",
+                    "They only work for children",
+                    "They replace the need for hygiene"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Infection Control",
+                question: "How should antibiotics be used?",
+                options: [
+                    "Appropriately as prescribed",
+                    "Whenever feeling unwell",
+                    "Preventively every day",
+                    "Only for viral infections"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Infection Control",
+                question: "Why should contact with wild animals be avoided?",
+                options: [
+                    "They are always aggressive",
+                    "They may carry pathogens that can infect humans",
+                    "They are endangered",
+                    "They are afraid of humans"
+                ],
+                correct: 1
+            },
+
+            // Environmental Biology Questions (21-40)
+            {
+                topic: "Environmental Biology",
+                question: "What is Environmental Biology?",
+                options: [
+                    "Study of only plants",
+                    "Study of only animals",
+                    "Study of geology only",
+                    "Branch of biology studying interactions between organisms and environment"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What does the scope of Environmental Biology include?",
+                options: [
+                    "Only conservation strategies",
+                    "Only climate change",
+                    "Impact of human activities, pollution solutions, and conservation",
+                    "Only pollution studies"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Biology",
+                question: "How are biology and environment related?",
+                options: [
+                    "They are completely separate",
+                    "They are interdependent",
+                    "Biology controls environment",
+                    "Environment has no effect on biology"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What essential resources does environment provide?",
+                options: [
+                    "Only air and water",
+                    "Air, water, food, and shelter",
+                    "Only food",
+                    "Only shelter"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Which biological process absorbs CO₂?",
+                options: [
+                    "Respiration",
+                    "Photosynthesis",
+                    "Decomposition",
+                    "Digestion"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What is ecology?",
+                options: [
+                    "Study of rocks",
+                    "Study of weather",
+                    "Study of human behavior",
+                    "Branch of biology studying organism interactions with each other and environment"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What are producers also called?",
+                options: [
+                    "Heterotrophs",
+                    "Consumers",
+                    "Autotrophs",
+                    "Decomposers"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Which of these is an example of a herbivore?",
+                options: [
+                    "Deer",
+                    "Lion",
+                    "Human",
+                    "Fungi"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What type of consumer eats both plants and animals?",
+                options: [
+                    "Herbivore",
+                    "Carnivore",
+                    "Omnivore",
+                    "Producer"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Which is an abiotic component?",
+                options: [
+                    "Plants",
+                    "Animals",
+                    "Bacteria",
+                    "Sunlight"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What are the major processes in the carbon cycle?",
+                options: [
+                    "Only photosynthesis",
+                    "Photosynthesis, respiration, decomposition, combustion",
+                    "Only respiration",
+                    "Only decomposition"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "In the nitrogen cycle, what do bacteria do?",
+                options: [
+                    "Nothing important",
+                    "Convert nitrogen gas into usable form for plants",
+                    "Only consume nitrogen",
+                    "Destroy nitrogen"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What are the major processes in the water cycle?",
+                options: [
+                    "Only evaporation",
+                    "Evaporation, condensation, precipitation, runoff",
+                    "Only precipitation",
+                    "Only condensation"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Which terrestrial ecosystem has high biodiversity and is crucial for carbon storage?",
+                options: [
+                    "Forests",
+                    "Desert",
+                    "Tundra",
+                    "Grasslands"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What percentage of Earth do marine ecosystems cover?",
+                options: [
+                    "50%",
+                    "60%",
+                    "70%",
+                    "80%"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Which human activity causes habitat destruction?",
+                options: [
+                    "Recycling",
+                    "Conservation",
+                    "Reforestation",
+                    "Deforestation"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What is a consequence of overfishing?",
+                options: [
+                    "Increased fish populations",
+                    "Reduced animal populations",
+                    "Better ecosystems",
+                    "More biodiversity"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Which is a solution for conservation?",
+                options: [
+                    "Use sustainable resources",
+                    "Increased pollution",
+                    "More deforestation",
+                    "Ignore wildlife protection"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Environmental Biology",
+                question: "What type of energy adoption helps conservation?",
+                options: [
+                    "Fossil fuels",
+                    "Renewable energy",
+                    "Nuclear waste",
+                    "Coal burning"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Biology",
+                question: "Why is pollution control important for ecosystems?",
+                options: [
+                    "It has no effect",
+                    "Pollution helps ecosystems",
+                    "Pollution disrupts ecosystems",
+                    "Only affects humans"
+                ],
+                correct: 2
+            },
+
+            // Environmental Pollution Questions (41-60)
+            {
+                topic: "Environmental Pollution",
+                question: "What is environmental pollution?",
+                options: [
+                    "Natural cleaning process",
+                    "Contamination by harmful substances disrupting natural processes",
+                    "Beneficial addition to environment",
+                    "Only affects air"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What are natural sources of air pollution?",
+                options: [
+                    "Vehicle emissions",
+                    "Volcanic eruptions, wildfires, dust storms",
+                    "Industrial discharges",
+                    "Burning fossil fuels"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "Which disease is associated with air pollution?",
+                options: [
+                    "Diabetes",
+                    "Asthma",
+                    "Broken bones",
+                    "Color blindness"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What causes acid rain?",
+                options: [
+                    "Clean air",
+                    "Pure water",
+                    "Sunlight only",
+                    "Air pollution"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What makes water unsafe for consumption?",
+                options: [
+                    "High temperature",
+                    "Too much oxygen",
+                    "Contaminants entering water bodies",
+                    "Natural minerals"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "Which waterborne disease is mentioned?",
+                options: [
+                    "Asthma",
+                    "Cholera",
+                    "Skin cancer",
+                    "Hearing loss"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What causes soil pollution?",
+                options: [
+                    "Hazardous chemicals and waste disposal",
+                    "Natural rainfall",
+                    "Plant growth",
+                    "Animal movement"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What is an effect of soil pollution?",
+                options: [
+                    "Increased fertility",
+                    "Decreased soil fertility",
+                    "Better crops",
+                    "More nutrients"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What is noise pollution?",
+                options: [
+                    "Pleasant sounds",
+                    "Natural sounds",
+                    "Excessive noise levels disturbing life",
+                    "Quiet environment"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What can noise pollution cause in humans?",
+                options: [
+                    "Better sleep",
+                    "Hearing loss and stress",
+                    "Improved concentration",
+                    "Enhanced memory"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What is thermal pollution?",
+                options: [
+                    "Alteration of water temperature due to industrial activities",
+                    "Cold temperature changes",
+                    "Natural temperature cycles",
+                    "Solar heating"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What does thermal pollution cause in water bodies?",
+                options: [
+                    "Increased oxygen levels",
+                    "Better fish growth",
+                    "Reduced oxygen levels",
+                    "Cleaner water"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What is radioactive pollution?",
+                options: [
+                    "Natural sunlight",
+                    "Radio waves",
+                    "Release of radioactive substances into environment",
+                    "Sound pollution"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What can radioactive pollution cause?",
+                options: [
+                    "Better health",
+                    "Genetic mutations and cancer",
+                    "Improved immunity",
+                    "Faster healing"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What contributes to increased waste production?",
+                options: [
+                    "Population decrease",
+                    "Population growth",
+                    "Better recycling",
+                    "Less consumption"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "How does deforestation affect air quality?",
+                options: [
+                    "Improves air purification",
+                    "Has no effect",
+                    "Increases oxygen production",
+                    "Reduces natural air purification"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What do greenhouse gases cause?",
+                options: [
+                    "Global cooling",
+                    "Better weather",
+                    "Global warming by trapping heat",
+                    "More rainfall"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What breaks down ozone layer?",
+                options: [
+                    "Oxygen",
+                    "Water vapor",
+                    "Carbon dioxide",
+                    "Chlorofluorocarbons (CFCs)"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "Which is an example of government regulation?",
+                options: [
+                    "Ignore pollution",
+                    "Increase emissions",
+                    "Clean Air Act",
+                    "Ban all industries"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Environmental Pollution",
+                question: "What is the 3R principle?",
+                options: [
+                    "Run, Rest, Relax",
+                    "Reduce, Reuse, Recycle",
+                    "Read, Write, Remember",
+                    "Research, Report, Review"
+                ],
+                correct: 1
+            },
+
+            // Waste Management Questions (61-80)
+            {
+                topic: "Waste Management",
+                question: "What is infectious waste?",
+                options: [
+                    "Waste suspected to contain pathogens",
+                    "Clean medical equipment",
+                    "Normal household waste",
+                    "Recycled materials"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Waste Management",
+                question: "What can infectious waste spread?",
+                options: [
+                    "Good health",
+                    "HIV, hepatitis B and C",
+                    "Happiness",
+                    "Clean air"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is pathological waste?",
+                options: [
+                    "Paper waste",
+                    "Electronic waste",
+                    "Human or animal tissues, organs, body parts",
+                    "Food waste"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Waste Management",
+                question: "What is sharps waste?",
+                options: [
+                    "Blunt instruments",
+                    "Items that can cause cuts or puncture wounds",
+                    "Soft materials",
+                    "Paper documents"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What defines chemical waste?",
+                options: [
+                    "Safe household chemicals",
+                    "Discarded chemicals that are hazardous",
+                    "Water-based solutions",
+                    "Natural compounds only"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is pharmaceutical waste?",
+                options: [
+                    "New medications",
+                    "Medical equipment",
+                    "Expired, unused, or contaminated drugs and vaccines",
+                    "Hospital furniture"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Waste Management",
+                question: "What risk does radioactive waste pose?",
+                options: [
+                    "No risk at all",
+                    "Radiation exposure leading to health hazards",
+                    "Only financial loss",
+                    "Aesthetic problems only"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is non-hazardous waste similar to?",
+                options: [
+                    "Toxic chemicals",
+                    "Radioactive materials",
+                    "Medical sharps",
+                    "Domestic waste"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Waste Management",
+                question: "What does solid waste management encompass?",
+                options: [
+                    "Only collection",
+                    "Collection, transportation, treatment, and disposal",
+                    "Only disposal",
+                    "Only treatment"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What are sanitary landfills designed to do?",
+                options: [
+                    "Isolate waste from the environment",
+                    "Mix waste with environment",
+                    "Spread waste around",
+                    "Burn all waste"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Waste Management",
+                question: "What characterizes hazardous wastes?",
+                options: [
+                    "They are completely safe",
+                    "They may be toxic, corrosive, reactive, or flammable",
+                    "They are only liquid",
+                    "They are biodegradable"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is an important step in hazardous waste management?",
+                options: [
+                    "Ignore the waste",
+                    "Identification and classification",
+                    "Mix with regular waste",
+                    "Dispose anywhere"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is recycling?",
+                options: [
+                    "Throwing away materials",
+                    "Burning waste",
+                    "Process of collecting, processing, and reusing materials",
+                    "Burying waste"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Waste Management",
+                question: "How much energy does recycling aluminum save?",
+                options: [
+                    "50%",
+                    "75%",
+                    "95%",
+                    "25%"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Waste Management",
+                question: "What does recycling help conserve?",
+                options: [
+                    "Natural resources like timber, water, and minerals",
+                    "Only energy",
+                    "Only money",
+                    "Only time"
+                ],
+                correct: 0
+            },
+            {
+                topic: "Waste Management",
+                question: "Which UN Sustainable Development Goal relates to recycling?",
+                options: [
+                    "SDG 10",
+                    "SDG 12: Responsible Consumption and Production",
+                    "SDG 15",
+                    "SDG 8"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is biodegradation?",
+                options: [
+                    "Artificial waste breakdown",
+                    "Chemical synthesis",
+                    "Physical crushing",
+                    "Natural process by which microorganisms decompose organic matter"
+                ],
+                correct: 3
+            },
+            {
+                topic: "Waste Management",
+                question: "What are the end products of biodegradation?",
+                options: [
+                    "Toxic chemicals",
+                    "Heavy metals",
+                    "Carbon dioxide, water, and biomass",
+                    "Plastic particles"
+                ],
+                correct: 2
+            },
+            {
+                topic: "Waste Management",
+                question: "What is bioremediation?",
+                options: [
+                    "Chemical treatment only",
+                    "Use of living organisms to detoxify or remove pollutants",
+                    "Physical removal",
+                    "Thermal treatment"
+                ],
+                correct: 1
+            },
+            {
+                topic: "Waste Management",
+                question: "What is bioaugmentation?",
+                options: [
+                    "Removing all microorganisms",
+                    "Adding specific microorganism strains to enhance pollutant breakdown",
+                    "Using only chemicals",
+                    "Physical separation only"
+                ],
+                correct: 1
+            }
+        ];
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let quizStarted = false;
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizScreen').classList.add('active');
+            quizStarted = true;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionCounter').textContent = `${currentQuestion + 1} / ${questions.length}`;
+
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <span class="option-letter">${String.fromCharCode(65 + index)}.</span>
+                    <span>${option}</span>
+                `;
+
+                if (userAnswers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+
+            updateNavigation();
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                option.classList.remove('selected');
+                if (i === index) {
+                    option.classList.add('selected');
+                }
+            });
+
+            // Auto-advance after selection (optional)
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    nextQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, 500);
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentQuestion === 0;
+
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Finish Quiz';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function finishQuiz() {
+            document.getElementById('quizScreen').classList.remove('active');
+            document.getElementById('resultsScreen').style.display = 'block';
+            showResults();
+        }
+
+        function showResults() {
+            let correctCount = 0;
+            const topicScores = {};
+
+            // Initialize topic scores
+            const topics = [...new Set(questions.map(q => q.topic))];
+            topics.forEach(topic => {
+                topicScores[topic] = { correct: 0, total: 0 };
+            });
+
+            // Calculate scores
+            questions.forEach((question, index) => {
+                const topic = question.topic;
+                topicScores[topic].total++;
+
+                if (userAnswers[index] === question.correct) {
+                    correctCount++;
+                    topicScores[topic].correct++;
+                }
+            });
+
+            const percentage = Math.round((correctCount / questions.length) * 100);
+
+            document.getElementById('finalScore').textContent = `${correctCount}/${questions.length}`;
+            document.getElementById('correctAnswers').textContent = correctCount;
+            document.getElementById('percentage').textContent = percentage + '%';
+
+            // Set score color based on performance
+            const percentageElement = document.getElementById('percentage');
+            percentageElement.className = '';
+            if (percentage >= 90) percentageElement.classList.add('score-excellent');
+            else if (percentage >= 75) percentageElement.classList.add('score-good');
+            else if (percentage >= 60) percentageElement.classList.add('score-fair');
+            else percentageElement.classList.add('score-poor');
+
+            // Show topic breakdown
+            const topicResultsContainer = document.getElementById('topicResults');
+            topicResultsContainer.innerHTML = '';
+
+            topics.forEach(topic => {
+                const score = topicScores[topic];
+                const topicPercentage = Math.round((score.correct / score.total) * 100);
+
+                const topicElement = document.createElement('div');
+                topicElement.className = 'topic-item';
+                topicElement.innerHTML = `
+                    <span>${topic}</span>
+                    <span class="${getScoreClass(topicPercentage)}">${score.correct}/${score.total} (${topicPercentage}%)</span>
+                `;
+                topicResultsContainer.appendChild(topicElement);
+            });
+            // Show detailed answers
+            const answerDetailsContainer = document.getElementById('answerDetails');
+            answerDetailsContainer.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const answerElement = document.createElement('div');
+                answerElement.className = 'answer-item';
+
+                const userAnswerIndex = userAnswers[index];
+                const isCorrect = userAnswerIndex === question.correct;
+                const userAnswerText = userAnswerIndex !== null ?
+                    question.options[userAnswerIndex] : 'Not answered';
+
+                answerElement.innerHTML = `
+                    <div class="question">${index + 1}. ${question.question}</div>
+                    <div class="user-answer ${isCorrect ? 'correct' : 'incorrect'}">
+                        Your answer: ${userAnswerText}
+                        ${isCorrect ? '✓' : '✗'}
+                    </div>
+                    <div class="correct-answer">
+                        Correct answer: ${question.options[question.correct]}
+                    </div>
+                `;
+                answerDetailsContainer.appendChild(answerElement);
+            });
+        }
+
+        function getScoreClass(percentage) {
+            if (percentage >= 90) return 'score-excellent';
+            if (percentage >= 75) return 'score-good';
+            if (percentage >= 60) return 'score-fair';
+            return 'score-poor';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('progressBar').style.width = '0%';
+        }
+
+        // Initialize the quiz
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show start screen initially
+            document.getElementById('startScreen').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
